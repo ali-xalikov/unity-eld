@@ -3,7 +3,6 @@ import type { Driver, DriverFilters } from "../types/driver";
 import DriversFilterBar from "./DriversFilterBar";
 import DriversSortBar from "./DriversSortBar";
 import DriversTable from "./DriversTable";
-import AddDriverModal from "./AddDriverModal";
 
 interface DriversPanelProps {
   drivers: Driver[];
@@ -23,16 +22,14 @@ const defaultFilters: DriverFilters = {
 
 function toSeconds(time: string) {
   const [h, m] = time.split(":").map(Number);
-  return h * 60 + m;
+  return (h || 0) * 60 + (m || 0);
 }
 
 export default function DriversPanel({
   drivers,
-  onAddDriver,
   search,
 }: DriversPanelProps) {
   const [filters, setFilters] = useState<DriverFilters>(defaultFilters);
-  const [modalOpen, setModalOpen] = useState(false);
 
   const updateFilter = <K extends keyof DriverFilters>(
     key: K,
@@ -45,7 +42,9 @@ export default function DriversPanel({
     );
 
     if (filters.violationFilter) {
-      filtered = filtered.filter((d) => d.violation === filters.violationFilter);
+      filtered = filtered.filter(
+        (d) => d.violation === filters.violationFilter
+      );
     }
 
     if (filters.eldFilter) {
@@ -58,6 +57,7 @@ export default function DriversPanel({
         : filtered.filter((d) => d.name !== filters.nameFilter);
     }
 
+    // Sort
     filtered = [...filtered].sort((a, b) => {
       let valA: number | string;
       let valB: number | string;
@@ -87,17 +87,11 @@ export default function DriversPanel({
   );
 
   return (
-    <div className="mt-[35px] rounded-xl">
-      <div className="mb-5 flex items-center justify-between">
-        <h2 className="text-[32px] font-medium text-[#1B2140] dark:text-white">
+    <div className="mt-8">
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-[32px] font-semibold text-[#1B2140] dark:text-white tracking-tight">
           Drivers info
         </h2>
-        <button
-          onClick={() => setModalOpen(true)}
-          className="rounded-lg bg-orange-500 px-5 py-2 text-white font-medium hover:bg-orange-600"
-        >
-          + Add Driver
-        </button>
       </div>
 
       <DriversFilterBar
@@ -112,15 +106,9 @@ export default function DriversPanel({
         onChange={updateFilter}
       />
 
-      <div className="mt-5">
+      <div className="mt-6">
         <DriversTable drivers={visibleDrivers} />
       </div>
-
-      <AddDriverModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onAdd={onAddDriver}
-      />
     </div>
   );
 }

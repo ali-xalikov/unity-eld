@@ -15,21 +15,26 @@ export default function Dashboard() {
   const handleAddDriver = (driver: Driver) => {
     setDrivers((prev) => [driver, ...prev]);
   };
+  const [collapsed, setCollapsed] = useState(false);
+
 
   return (
     <div className={darkMode ? "dark" : ""}>
       <div className="flex min-h-screen bg-[#F5F7FA] dark:bg-[#12162C]">
-        <Sidebar />
+        <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
 
-        <main className="flex-1 p-7">
+        <main className={`flex-1 ${!collapsed ? 'ml-72' : 'ml-15'} p-8`}>
           <TopHeader
             search={search}
             onSearchChange={setSearch}
             darkMode={darkMode}
             onToggleDarkMode={() => setDarkMode((prev) => !prev)}
           />
+
           <Toolbar />
+
           <StatsBar drivers={drivers} />
+
           <DriversPanel
             drivers={drivers}
             onAddDriver={handleAddDriver}

@@ -74,38 +74,46 @@ export default function CalendarPopover({
 
   return (
     <>
-      <div className="fixed inset-0 z-40" onClick={onClose} />
-      <div className="absolute right-0 top-12 z-50 w-72 rounded-xl border border-gray-200 bg-white p-4 shadow-lg dark:border-gray-700 dark:bg-[#1B2140]">
-        <div className="mb-3 flex items-center justify-between">
+      <div
+        className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      <div className="absolute right-6 top-20 z-50 w-80 rounded-3xl border border-gray-200 bg-white p-6 shadow-2xl dark:border-gray-700 dark:bg-[#1B2140]">
+        {/* Header */}
+        <div className="mb-6 flex items-center justify-between">
           <button
             onClick={goPrevMonth}
-            className="rounded-lg p-1 text-gray-500 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/10"
+            className="rounded-xl p-2 text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/10 transition-all active:scale-95"
           >
-            <ChevronLeft size={16} />
+            <ChevronLeft size={20} />
           </button>
-          <span className="text-sm font-semibold text-[#1B2140] dark:text-white">
+
+          <span className="text-lg font-semibold text-[#1B2140] dark:text-white">
             {monthLabel}
           </span>
+
           <button
             onClick={goNextMonth}
-            className="rounded-lg p-1 text-gray-500 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/10"
+            className="rounded-xl p-2 text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/10 transition-all active:scale-95"
           >
-            <ChevronRight size={16} />
+            <ChevronRight size={20} />
           </button>
         </div>
 
-        <div className="grid grid-cols-7 gap-1 text-center text-xs text-gray-400 dark:text-gray-400">
+        {/* Week days */}
+        <div className="grid grid-cols-7 gap-1 mb-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400">
           {weekDays.map((d) => (
-            <span key={d} className="py-1">
+            <div key={d} className="py-1">
               {d}
-            </span>
+            </div>
           ))}
         </div>
 
+        {/* Calendar grid */}
         <div className="grid grid-cols-7 gap-1">
           {cells.map((day, i) =>
             day === null ? (
-              <span key={`empty-${i}`} />
+              <div key={`empty-${i}`} className="h-10" />
             ) : (
               <button
                 key={day}
@@ -113,12 +121,12 @@ export default function CalendarPopover({
                   onSelectDate(new Date(viewYear, viewMonth, day));
                   onClose();
                 }}
-                className={`h-8 w-8 rounded-lg text-sm transition ${
+                className={`h-10 w-10 rounded-2xl text-sm font-medium transition-all hover:bg-orange-100 dark:hover:bg-white/10 ${
                   isSameDay(day)
-                    ? "bg-orange-500 text-white"
+                    ? "bg-orange-500 text-white shadow-md"
                     : isToday(day)
-                    ? "border border-orange-500 text-orange-500"
-                    : "text-gray-600 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-white/10"
+                    ? "border-2 border-orange-500 text-orange-500"
+                    : "text-gray-700 dark:text-gray-200 hover:text-orange-500"
                 }`}
               >
                 {day}

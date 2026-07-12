@@ -15,25 +15,27 @@ export default function DriversSortBar({
   onChange,
 }: DriversSortBarProps) {
   return (
-    <div className="mt-4 flex items-start gap-8">
+    <div className="mt-6 flex items-start gap-8 rounded-3xl">
+      {/* Cycle Option (hozircha static) */}
       <div>
-        <p className="mb-1 text-xs text-gray-400 dark:text-gray-500">
+        <p className="mb-2 text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 font-medium">
           Cycle option
         </p>
-        <select className="h-11 w-40 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-white/5 px-4 text-sm text-gray-500 dark:text-gray-300 outline-none">
+        <select className="h-12 w-44 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#12162C] px-4 text-sm text-gray-700 dark:text-gray-200 outline-none focus:border-orange-500 hover:border-orange-400 transition-all">
           <option>Cycle</option>
         </select>
       </div>
 
+      {/* Sort */}
       <div>
-        <p className="mb-1 text-xs text-gray-400 dark:text-gray-500">
+        <p className="mb-2 text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 font-medium">
           Sort drivers
         </p>
         <div className="flex gap-3">
           <select
             value={orderBy}
             onChange={(e) => onChange("orderBy", e.target.value as OrderBy)}
-            className="h-11 w-40 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-white/5 px-4 text-sm text-gray-500 dark:text-gray-300 outline-none"
+            className="h-12 w-44 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#12162C] px-4 text-sm text-gray-700 dark:text-gray-200 outline-none focus:border-orange-500 hover:border-orange-400 transition-all cursor-pointer"
           >
             <option value="name">Order by name</option>
             <option value="date">Order by date</option>
@@ -43,7 +45,7 @@ export default function DriversSortBar({
           <select
             value={direction}
             onChange={(e) => onChange("direction", e.target.value as Direction)}
-            className="h-11 w-40 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-white/5 px-4 text-sm text-gray-500 dark:text-gray-300 outline-none"
+            className="h-12 w-44 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#12162C] px-4 text-sm text-gray-700 dark:text-gray-200 outline-none focus:border-orange-500 hover:border-orange-400 transition-all cursor-pointer"
           >
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>

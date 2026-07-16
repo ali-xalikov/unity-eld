@@ -25,8 +25,8 @@ interface SidebarProps {
 }
 
 const starItems: NavItem[] = [
-  { title: "Dashboard", icon: <LayoutDashboard size={18} />, badge: "new 16" },
-  { title: "Company", icon: <Building2 size={18} />, badge: 67, active: true },
+  { title: "Dashboard", icon: <LayoutDashboard size={18} />, badge: "new 16", path: "/dashboard" },
+  { title: "Company", icon: <Building2 size={18} />, badge: 67, path: "/dashboard/company" },
 ];
 
 const menuItems: NavItem[] = [
@@ -46,12 +46,12 @@ function NavRow({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
       onClick={() => {
         if (item.path) {
           navigate(item.path);
-        } else if (!item.active) {
+        } else {
           toast("Bu sahifa hali ishlab chiqilmoqda");
         }
       }}
       className={`group flex cursor-pointer items-center gap-3.5 rounded-2xl px-5 py-3.5 transition-all ${
-        isActive || item.active
+        isActive
           ? "bg-white text-[#1B2140] shadow-sm"
           : "hover:bg-[#323a68] text-white/90 hover:text-white"
       } ${collapsed ? "justify-center px-3" : ""}`}
@@ -59,7 +59,7 @@ function NavRow({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
       {/* Icon rangi active holatga moslashtirildi */}
       <div
         className={`transition-colors ${
-          isActive || item.active
+          isActive
             ? "text-[#1B2140]"
             : "text-white/80 group-hover:text-white"
         }`}
@@ -73,7 +73,7 @@ function NavRow({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
           {item.badge && (
             <div
               className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                isActive || item.active
+                isActive
                   ? "bg-orange-100 text-orange-600"
                   : "bg-white/20 text-white"
               }`}

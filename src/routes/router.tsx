@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Login from "../pages/Login";
 import Dashboard from "../pages/dashboard/Dashboard";
 import Logs from "../pages/dashboard/Logs";
+import NotFound from "../pages/NotFound";
 import ProtectedRoute from "../ProtectedRoute";
 import { HashRouter } from "react-router-dom";
 
@@ -29,15 +30,8 @@ export default function Router() {
           }
         />
 
-        {/* 404 sahifa (ixtiyoriy) */}
-        <Route
-          path="*"
-          element={
-            <div className="flex h-screen items-center justify-center text-2xl">
-              404 - Sahifa topilmadi
-            </div>
-          }
-        />
+        {/* 404 sahifa */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </HashRouter>
   );

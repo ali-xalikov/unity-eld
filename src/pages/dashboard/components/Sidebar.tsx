@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 import { type ReactElement } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   ChevronsLeft,
   LayoutDashboard,
@@ -7,6 +8,7 @@ import {
   Clock3,
   TriangleAlert,
   Users,
+  FileText,
 } from "lucide-react";
 import logo from "../../../../public/assets/images/Logo_white.svg";
 
@@ -15,6 +17,7 @@ interface NavItem {
   icon: ReactElement;
   badge?: string | number;
   active?: boolean;
+  path?: string;
 }
 interface SidebarProps {
   collapsed: boolean;
@@ -27,19 +30,28 @@ const starItems: NavItem[] = [
 ];
 
 const menuItems: NavItem[] = [
-  { title: "ELD", icon: <Clock3 size={18} /> },
-  { title: "Reports", icon: <TriangleAlert size={18} /> },
-  { title: "Users", icon: <Users size={18} /> },
+  { title: "ELD", icon: <Clock3 size={18} />, path: "/dashboard/eld" },
+  { title: "Logs", icon: <FileText size={18} />, path: "/dashboard/logs" },
+  { title: "Reports", icon: <TriangleAlert size={18} />, path: "/dashboard/reports" },
+  { title: "Users", icon: <Users size={18} />, path: "/dashboard/users" },
 ];
 
 function NavRow({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isActive = item.path && location.pathname === item.path;
+
   return (
     <div
       onClick={() => {
-        if (!item.active) toast("Bu sahifa hali ishlab chiqilmoqda");
+        if (item.path) {
+          navigate(item.path);
+        } else if (!item.active) {
+          toast("Bu sahifa hali ishlab chiqilmoqda");
+        }
       }}
       className={`group flex cursor-pointer items-center gap-3.5 rounded-2xl px-5 py-3.5 transition-all ${
-        item.active
+        isActive || item.active
           ? "bg-white text-[#1B2140] shadow-sm"
           : "hover:bg-[#323a68] text-white/90 hover:text-white"
       } ${collapsed ? "justify-center px-3" : ""}`}
@@ -47,7 +59,7 @@ function NavRow({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
       {/* Icon rangi active holatga moslashtirildi */}
       <div
         className={`transition-colors ${
-          item.active
+          isActive || item.active
             ? "text-[#1B2140]"
             : "text-white/80 group-hover:text-white"
         }`}
@@ -61,7 +73,7 @@ function NavRow({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
           {item.badge && (
             <div
               className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                item.active
+                isActive || item.active
                   ? "bg-orange-100 text-orange-600"
                   : "bg-white/20 text-white"
               }`}

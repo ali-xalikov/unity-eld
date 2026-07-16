@@ -1,0 +1,233 @@
+# Cursor/Copilot Development Rules for Unity ELD Project
+
+## Project Overview
+- **Framework**: React 19 + TypeScript 6 + Vite 8
+- **Styling**: Tailwind CSS 4.3
+- **Routing**: React Router 7 (HashRouter for GitHub Pages)
+- **State Management**: React Hooks (useState, useMemo, useCallback)
+- **UI Components**: shadcn/ui components + custom components
+- **Deployment**: GitHub Pages
+
+## Code Style Rules
+
+### TypeScript/React
+1. **Use functional components** with React hooks only
+2. **Always type component props** with interfaces
+3. **Use TypeScript strict mode** - all variables/returns must be typed
+4. **Avoid `any` type** - use proper typing instead
+5. **Import React components** from correct paths
+6. **Use arrow functions** for component definitions
+
+### Example Component Structure
+```typescript
+interface ComponentProps {
+  title: string;
+  count: number;
+  onAction?: (value: string) => void;
+}
+
+export default function MyComponent({ title, count, onAction }: ComponentProps) {
+  const [state, setState] = useState(0);
+
+  return (
+	<div>
+	  {title}
+	</div>
+  );
+}
+```
+
+### Tailwind CSS
+1. **Use Tailwind classes** for all styling (no CSS files in components)
+2. **Dark mode classes** are supported - use `dark:` prefix
+3. **Responsive classes** use `sm:`, `md:`, `lg:`, `xl:` prefixes
+4. **Use consistent spacing** - use Tailwind scale (4px base unit)
+5. **Color system** - use Tailwind color names (gray-500, blue-600, etc.)
+
+### File Naming
+- **Components**: PascalCase (MyComponent.tsx)
+- **Hooks**: camelCase starting with 'use' (useLocalStorage.ts)
+- **Data/Utilities**: camelCase (drivers.ts, utils.ts)
+- **Types**: camelCase with .ts extension (driver.ts for interfaces)
+- **Pages**: PascalCase (Dashboard.tsx, Logs.tsx)
+
+### Directory Structure Rules
+```
+src/
+├── pages/           # Page components (full page layouts)
+├── components/      # Reusable components
+├── routes/          # Router configuration
+├── hooks/          # Custom React hooks (if needed)
+├── utils/          # Utility functions (if needed)
+├── types/          # TypeScript interfaces/types
+└── data/           # Mock data or constants
+```
+
+## Import Organization
+```typescript
+// 1. React/third-party imports
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+// 2. Internal imports
+import Button from "@/components/Button";
+import type { Driver } from "@/types/driver";
+
+// 3. Styles/assets (if any)
+import styles from "./Component.module.css";
+```
+
+## Component Patterns
+
+### State Management
+- Use `useState` for component-level state
+- Use `useMemo` for expensive computations
+- Use `useCallback` for memoized functions
+- Avoid prop drilling - pass necessary data only
+
+### Data Fetching
+- Use mock data in `src/data/` for now
+- Structure: `initialDrivers`, `mockLogsData`, etc.
+- Keep data files simple without complex logic
+
+### Props Destructuring
+```typescript
+// ✅ Good
+function Component({ title, items, onClick }: ComponentProps) {
+  return <div>{title}</div>;
+}
+
+// ❌ Avoid
+function Component(props: ComponentProps) {
+  return <div>{props.title}</div>;
+}
+```
+
+## Routing Rules
+- **Router**: Use `HashRouter` (GitHub Pages requirement)
+- **Protected Routes**: Wrap in `<ProtectedRoute>` component
+- **URLs**: Hash-based format `/#/path`
+- **Navigation**: Use `useNavigate()` hook from react-router-dom
+
+### Route Structure
+```typescript
+<HashRouter>
+  <Routes>
+	<Route path="/" element={<Login />} />
+	<Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+	<Route path="/dashboard/logs" element={<ProtectedRoute><Logs /></ProtectedRoute>} />
+	<Route path="*" element={<NotFound />} />
+  </Routes>
+</HashRouter>
+```
+
+## Performance Rules
+1. **Memoize expensive operations** with `useMemo`
+2. **Memoize callbacks** with `useCallback` when passed to children
+3. **Lazy load components** if app grows (React.lazy)
+4. **Key prop**: Always provide unique `key` in lists
+5. **Conditional rendering**: Use early returns when possible
+
+## Accessibility Rules
+1. **Semantic HTML**: Use proper tags (button, nav, main, etc.)
+2. **ARIA labels**: Add when needed for screen readers
+3. **Color contrast**: Ensure dark mode has proper contrast
+4. **Keyboard navigation**: Test with Tab key
+5. **Form labels**: Always associate with input elements
+
+## Dark Mode
+- All components should support dark mode
+- Use `dark:` Tailwind classes
+- Check colors: `text-gray-900 dark:text-white`
+- Background: `bg-white dark:bg-[#1B2140]`
+- Theme toggle in TopHeader component
+
+## Error Handling
+```typescript
+// ✅ Good error handling
+try {
+  const data = JSON.parse(localStorage.getItem("user") || "{}");
+} catch (error) {
+  console.error("Failed to parse user data", error);
+}
+
+// Show user-friendly toast
+import { toast } from "sonner";
+toast.error("Something went wrong");
+```
+
+## Git Commit Messages
+- Format: `type: description`
+- Types: feat, fix, refactor, docs, test, style
+- Example: `feat: Add Logs page with table and filters`
+- Keep messages concise and descriptive
+
+## Build & Deployment
+- `npm run dev` - Development server
+- `npm run build` - Production build
+- `npm run deploy` - Deploy to GitHub Pages
+- `npm run lint` - Check code style
+
+## Common Tasks
+
+### Adding New Page
+1. Create file in `src/pages/PageName.tsx`
+2. Define TypeScript interface for props
+3. Add route in `src/routes/router.tsx`
+4. Wrap with `ProtectedRoute` if needed
+5. Add navigation in Sidebar
+
+### Adding New Component
+1. Create file in `src/components/ComponentName.tsx`
+2. Define interface for props
+3. Use Tailwind for styling
+4. Support dark mode with `dark:` classes
+5. Export as default
+
+### Adding New Data
+1. Create/update file in `src/data/`
+2. Define TypeScript types in `src/pages/dashboard/types/`
+3. Use in components with proper imports
+4. Keep mock data separate from logic
+
+## Linting & Quality
+- Run `npm run lint` before commits
+- Fix TypeScript errors completely
+- No unused imports/variables
+- Use proper error boundaries where needed
+
+## Testing Workflow
+1. Test in development: `npm run dev`
+2. Build locally: `npm run build`
+3. Preview build: `npm run preview`
+4. Test GitHub Pages deployment
+
+## UI Component Library
+- Using **shadcn/ui** components (in `src/components/ui/`)
+- Available: Button, Card, Input, Label, Checkbox, etc.
+- Custom styled with Tailwind CSS
+- Customizable and composable
+
+## Development Mindset
+1. **Think in components** - break UI into reusable parts
+2. **Data first** - define types before implementation
+3. **Mobile first** - design for small screens first
+4. **Dark mode first** - consider dark mode in every component
+5. **Accessibility first** - semantic HTML and ARIA labels
+6. **Performance first** - use React hooks wisely
+
+## When in Doubt
+1. Check similar components in project
+2. Follow existing patterns
+3. Run `npm run lint` to catch issues
+4. Test in browser (dev and build)
+5. Check GitHub Pages deployment
+
+## Common Pitfalls to Avoid
+- ❌ Using `any` type in TypeScript
+- ❌ Forgetting `dark:` classes in styled components
+- ❌ Not memoizing in lists (missing `key` prop)
+- ❌ Prop drilling too deep
+- ❌ Importing from wrong paths
+- ❌ Forgetting to add `ProtectedRoute` wrapper
+- ❌ Using `BrowserRouter` (must use `HashRouter`)

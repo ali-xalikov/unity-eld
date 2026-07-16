@@ -3,11 +3,11 @@ import Login from "../pages/Login";
 import Dashboard from "../pages/dashboard/Dashboard";
 import Logs from "../pages/dashboard/Logs";
 import ProtectedRoute from "../ProtectedRoute";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 
 export default function Router() {
   return (
-    <BrowserRouter basename="/unity-eld/">
+    <HashRouter>
       <Routes>
         <Route path="/" element={<Login />} />
 
@@ -39,6 +39,6 @@ export default function Router() {
           }
         />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
